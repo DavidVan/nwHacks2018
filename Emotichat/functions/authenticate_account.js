@@ -32,7 +32,7 @@ module.exports = (userName, password, context, callback) => {
         }
         const token = {
             token: jwt.sign({ userData }, secret, {
-                expiresIn: "1m" // Expires in 1 month
+                expiresIn: "30 days" // Expires in 30 days
             }),
         }
 
