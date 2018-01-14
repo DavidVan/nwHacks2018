@@ -22,7 +22,6 @@ const UserSchema = new mongoose.Schema({
 
 UserSchema.pre('save', function (next) {
     let user = this;
-    console.log("Inside user.js: Pass: " + user.password);
     bcrypt.hash(user.password, 10, (err, hash) => {
         if (err) {
             return next(err);
@@ -31,6 +30,30 @@ UserSchema.pre('save', function (next) {
         next();
     });
 });
+
+UserSchema.statics.authenticate = (userName, password, callback) => {
+    User.findOne({ userName: userName })
+        .exec((err, user) => {
+            if (err) {
+                return callback(err);
+            }
+            if (!user) {
+                let err = new Error('User not found');
+                err.status = 401;
+                return callback(err);
+            }
+            bcrypt.compare(password, user.password, (err, result) => {
+                if (result === true) {
+                    return callback(null, user);
+                }
+                else {
+                    let err = new Error('Wrong password!');
+                    err.status = 401;
+                    return callback(err);
+                }
+            });
+        });
+};
 
 let User = mongoose.model('User', UserSchema);
 
