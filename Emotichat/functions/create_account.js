@@ -26,8 +26,8 @@ module.exports = (email, userName, password, context, callback) => {
     console.log("Pass: " + user.password);
 
     db.once('open', () => {
-        user
-            .save()
+        console.log("User: " + user);
+        user.save()
             .then(() => {
                 callback(null, `User ${userName} created.`);
             })
