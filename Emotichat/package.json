@@ -8,7 +8,8 @@
     "bcrypt": "^1.0.3",
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
-    "mongoose": "^4.13.9"
+    "mongoose": "^4.13.9",
+    "mongoose-auto-increment": "^5.0.1"
   },
   "private": true,
   "stdlib": {
