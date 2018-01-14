@@ -12,6 +12,7 @@ module.exports = (email, userName, password, context, callback) => {
     let mongoUri = process.env['MONGO_URI'];
     let options = {
         useMongoClient: true,
+        keepAlive: 60000,
     }
 
     let user = new UserModel({
@@ -27,7 +28,9 @@ module.exports = (email, userName, password, context, callback) => {
     db.once('open', () => {
         user.save()
             .then(() => {
-                callback(null, `User ${userName} created.`);
+                UserModel.authenticate(userName, password, (token) => {
+                    callback(null, token);
+                });
             })
             .catch((err) => {
                 callback(null, `User ${userName} not created. ${err}`);
