@@ -14,6 +14,7 @@ import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.result.Result
 import com.github.kittinunf.result.getAs
 import com.google.gson.*
+import kotlinx.android.synthetic.main.activity_friend_list.*
 
 /**
  * Created by David on 1/14/2018.
@@ -55,6 +56,17 @@ class FriendListActivity : AppCompatActivity() {
                     var adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, friends)
                     var listView = findViewById<ListView>(R.id.friendsList)
                     listView.adapter = adapter
+
+                    listView.setOnItemClickListener {
+                        parent, view, position, id ->
+
+                        var intent = Intent(this, ChatActivity ::class.java)
+                        var bundle = Bundle()
+                        bundle.putString("userName", userName)
+                        bundle.putString("recipient", friends.get(position))
+                        intent.putExtras(bundle)
+                        startActivity(intent)
+                    }
                 }
             }
         }
