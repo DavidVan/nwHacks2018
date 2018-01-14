@@ -10,6 +10,7 @@ const bcrypt = require('bcrypt');
 module.exports = (id, context, callback) => {
     let mongoUri = process.env['MONGO_URI'];
 
+    var ObjectId = require('mongodb').ObjectId;
     var MongoClient = require('mongodb').MongoClient;
     
     MongoClient.connect(mongoUri, function(err, db) {
@@ -17,14 +18,13 @@ module.exports = (id, context, callback) => {
         if (err) {
             console.log(err); 
         }
-        var query_id = 'ObjectId("' + id + '")';
-        var myQuery = { "_id" : query_id };
+        var myQuery = { "_id" : new ObjectId(id)};
         var newValues = { $set : { read : true } };
         dbo.collection("messages").updateOne(myQuery, newValues, function(err, res) {
             if (err) {
                 console.log("Error: " + err); 
             } else {
-                console.log("Marked " + query_id + " as read"); 
+                console.log("Marked " + id + " as read"); 
             }
         });
         dbo.collection("messages").findOne(myQuery, function(err, res) {
