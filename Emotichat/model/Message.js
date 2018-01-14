@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 
 const MessageSchema = new mongoose.Schema({
     uid: {
-        type: Number,
+        type: String,
         unique: true,
         required: true,
     },
@@ -16,6 +16,10 @@ const MessageSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
+    },
+    date: {
+        type: Date,
+        required: true,
     },
     content: {
         type: String,

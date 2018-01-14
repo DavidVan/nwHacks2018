@@ -9,8 +9,10 @@
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
     "jsonwebtoken": "^8.1.0",
+    "mongodb": "^3.0.1",
     "mongoose": "^4.13.9",
-    "mongoose-auto-increment": "^5.0.1"
+    "mongoose-auto-increment": "^5.0.1",
+    "uuid": "^3.1.0"
   },
   "private": true,
   "stdlib": {
