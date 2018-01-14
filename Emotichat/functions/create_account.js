@@ -22,6 +22,7 @@ module.exports = (email, userName, password, context, callback) => {
         email: email,
         userName: userName,
         password: password,
+        friendsList: [],
     });
 
     mongoose.connect(mongoUri, options);
