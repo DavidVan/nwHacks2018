@@ -23,10 +23,8 @@ module.exports = (email, userName, password, context, callback) => {
     mongoose.connect(mongoUri, options);
     let db = mongoose.connection;
 
-    console.log("Pass: " + user.password);
 
     db.once('open', () => {
-        console.log("User: " + user);
         user.save()
             .then(() => {
                 callback(null, `User ${userName} created.`);
