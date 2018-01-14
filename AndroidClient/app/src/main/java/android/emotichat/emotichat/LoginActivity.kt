@@ -40,7 +40,6 @@ class LoginActivity : AppCompatActivity() {
                 when (result) {
                     is Result.Failure -> {
                         error = result.getAs()
-                        Log.d("David", request.toString())
                     }
                     is Result.Success -> {
                         data = result.getAs<String>(); // Token
@@ -50,7 +49,12 @@ class LoginActivity : AppCompatActivity() {
                             commit()
                         }
                         // Launch main part of application
-                        startActivity(Intent(this, FriendListActivity::class.java))
+                        var intent = Intent(this, FriendListActivity::class.java)
+                        var bundle = Bundle()
+                        bundle.putString("userName", userName)
+                        bundle.putString("token", data)
+                        intent.putExtras(bundle)
+                        startActivity(intent)
                     }
                 }
             }
