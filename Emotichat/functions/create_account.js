@@ -13,8 +13,6 @@ module.exports = (email, userName, password, context, callback) => {
     let options = {
         useMongoClient: true,
     }
-    mongoose.connect(mongoUri, options);
-    let db = mongoose.connection;
 
     let user = new UserModel({
         email: email,
@@ -22,16 +20,19 @@ module.exports = (email, userName, password, context, callback) => {
         password: password,
     });
 
-    console.log(user);
+    mongoose.connect(mongoUri, options);
+    let db = mongoose.connection;
+
+    console.log("Pass: " + user.password);
 
     db.once('open', () => {
         user
             .save()
             .then(() => {
-                callback(null, `User ${userName} created. Email: ${email}, password: ${password}`);
+                callback(null, `User ${userName} created.`);
             })
             .catch((err) => {
-                callback(null, `User ${userName} not created.`);
+                callback(null, `User ${userName} not created. ${err}`);
             })
             .finally(() => {
                 db.close();
