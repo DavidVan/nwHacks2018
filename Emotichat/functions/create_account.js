@@ -1,22 +1,6 @@
 const mongoose = require('mongoose');
-const userDetails = new mongoose.Schema({
-    email: {
-        type: String,
-        unique: true,
-        required: true,
-        trim: true,
-    },
-    userName: {
-        type: String,
-        unique: true,
-        required: true,
-        trim: true,
-    },
-    password: {
-        type: String,
-        required: true,
-    }
-});
+mongoose.Promise = require('bluebird');
+const UserModel = require('../model/User');
 
 /**
 * @param {string} email The user's email
@@ -25,6 +9,32 @@ const userDetails = new mongoose.Schema({
 * @returns {any}
 */
 module.exports = (email, userName, password, context, callback) => {
+    let mongoUri = process.env['MONGO_URI'];
+    let options = {
+        useMongoClient: true,
+    }
+    mongoose.connect(mongoUri, options);
+    let db = mongoose.connection;
 
-    callback(null, `Email: ${email}, Username: ${userName}, Password: ${password}`);
+    let user = new UserModel({
+        email: email,
+        userName: userName,
+        password: password,
+    });
+
+    console.log(user);
+
+    db.once('open', () => {
+        user
+            .save()
+            .then(() => {
+                callback(null, `User ${userName} created. Email: ${email}, password: ${password}`);
+            })
+            .catch((err) => {
+                callback(null, `User ${userName} not created.`);
+            })
+            .finally(() => {
+                db.close();
+            });
+    });
 };
