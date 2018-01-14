@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 const UserModel = require('../model/User');
+const jwt = require('jsonwebtoken');
+
+const secret = process.env['JWT_SECRET'];
 
 /**
 * @param {string} email The user's email
@@ -12,7 +15,7 @@ module.exports = (email, userName, password, context, callback) => {
     let mongoUri = process.env['MONGO_URI'];
     let options = {
         useMongoClient: true,
-        keepAlive: 60000,
+        keepAlive: 30000,
     }
 
     let user = new UserModel({
@@ -27,9 +30,18 @@ module.exports = (email, userName, password, context, callback) => {
     db.once('open', () => {
         user.save()
             .then(() => {
-                UserModel.authenticate(userName, password, (token) => {
-                    callback(null, token);
-                });
+                // Use JWT so user stays logged in...
+                const userData = {
+                    userName: user.userName,
+                    email: user.email,
+                }
+                const token = {
+                    token: jwt.sign({ userData }, secret, {
+                        expiresIn: "30 days" // Expires in 30 days
+                    }),
+                }
+
+                callback(null, token, { 'Content-Type': 'application/json'});
             })
             .catch((err) => {
                 callback(null, `User ${userName} not created. ${err}`);
