@@ -4,7 +4,11 @@
   "description": "",
   "author": "DavidVan <David@DavidVan.net>",
   "main": "functions/__main__.js",
-  "dependencies": {},
+  "dependencies": {
+    "bcrypt": "^1.0.3",
+    "body-parser": "^1.18.2",
+    "mongoose": "^4.13.9"
+  },
   "private": true,
   "stdlib": {
     "build": "faaslang",
